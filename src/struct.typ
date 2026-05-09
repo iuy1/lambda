@@ -1,5 +1,7 @@
 #let var(x) = {
-  assert(type(x) == str and x.len() == 1)
+  assert(type(x) == str)
+  assert(not x.contains("λ"))
+  assert(not x.contains("."))
   (type: "var", name: x)
 }
 
@@ -8,9 +10,13 @@
   (
     type: "func",
     vars: if type(vars) == str {
-      vars.codepoints().map(var)
-    } else {
+      vars.clusters().map(var)
+    } else if type(vars) == array {
       vars
+    } else if vars.type == "var" {
+      (vars,)
+    } else {
+      panic()
     },
     body: body,
   )
