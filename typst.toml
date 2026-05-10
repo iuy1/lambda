@@ -6,5 +6,5 @@ authors = ["iuy1 <https://github.com/iuy1>"]
 license = "MIT"
 description = "Parse and visualize lambda calculus expressions."
 repository = "https://github.com/iuy1/lambda"
-exclude = ["assets/fact.png"]
+exclude = ["examples/*", "assets/*"]
 categories = ["fun"]
