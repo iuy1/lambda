@@ -52,7 +52,7 @@
 #let pred_(n) = apply(pred, n)
 
 #let fact = parse("(/nf.n(/fn.n(f(/fx.nf(fx))))(/_.f)(/x.x))")
-
 #let fact_(n) = apply(fact, n)
 
 #let fib = parse("/nf.n(/ca./b.cb(/x.a(bx)))(/xy.x)(/x.x)f")
+#let fib_(n) = apply(fib, n)
