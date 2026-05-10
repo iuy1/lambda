@@ -1,12 +1,14 @@
 #import "struct.typ": *
 #import "parse.typ": *
 #import "simplify.typ": *
+#import "free-vars.typ": *
 
 #let encode(expr) = {
   if type(expr) == str {
     expr = parse(expr)
   }
   expr = expand(expr)
+  assert(free-vars(expr).len() == 0)
   let impl(expr, vars) = {
     if expr.type == "var" {
       "1" * (vars.len() - vars.at(expr.name)) + "0"
@@ -20,6 +22,10 @@
     }
   }
   impl(expr, (:))
+}
+
+#let equal(e1, e2) = {
+  encode(e1) == encode(e2)
 }
 
 #let decode(bits) = {

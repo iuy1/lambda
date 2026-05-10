@@ -33,3 +33,8 @@
 #free-vars("/x.xyz")
 ```
 #free-vars("/x.xyz")
+
+```typ
+#display(apply(parse("/x.xx", color: red), parse("/y.yy", color: blue)))
+```
+#display(apply(parse("/x.xx", color: red), parse("/y.yy", color: blue)))

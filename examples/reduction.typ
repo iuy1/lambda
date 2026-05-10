@@ -29,16 +29,14 @@
   ("x",),
 ))
 
-#display(beta-outmost(apply(
-  parse("/", "v", "x", "x'", "x''", ".", "v", "x", "x'", "x''"),
-  "x",
-)))
-
 ```typ
 #beta-all("(/a.(/bc.abcd)/a.b)(/c.d)").map(display).join([\ ]) // beta reduction
 ```
 #beta-all("(/a.(/bc.abcd)/a.b)(/c.d)").map(display).join([\ ])
 
-#display(normalize(const.pow_(const._2, const._3), steps: 16))
-
-#display(normalize(const.fact_(const._3), steps: 43))
+```typ
+#equal(normalize(const.pow_(const._2, const._3), steps: 16), const.Nat(8))
+#equal(normalize(const.fact_(const._3), steps: 30), const.Nat(6))
+```
+#equal(normalize(const.pow_(const._2, const._3), steps: 16), const.Nat(8))
+#equal(normalize(const.fact_(const._3), steps: 30), const.Nat(6))

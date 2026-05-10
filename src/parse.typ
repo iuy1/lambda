@@ -1,7 +1,7 @@
 #import "struct.typ": *
 
 // multi char variable names should be manually tokenized
-#let parse(..s) = {
+#let parse(..s, color: auto) = {
   s = s.pos()
   assert(s.all(si => type(si) == str))
   s = s.map(si => si.replace("/", "λ"))
@@ -19,13 +19,13 @@
       i += 1
       let vars = ()
       while s.at(i) != "." {
-        vars.push(var(s.at(i)))
+        vars.push(var(s.at(i), color: color))
         i += 1
       }
       assert(vars.len() >= 1)
       i += 1
       let (j, body) = impl(i)
-      (j, func(vars, body))
+      (j, func(vars, body, color: color))
     } else {
       // apply
       let items = ()
@@ -41,7 +41,7 @@
           items.push(item)
           i = j
         } else if s.at(i) != ")" {
-          items.push(var(s.at(i)))
+          items.push(var(s.at(i), color: color))
           i += 1
         } else {
           // s.at(i) == ")"
@@ -54,7 +54,7 @@
         if items.len() == 1 {
           items.first()
         } else {
-          apply(..items)
+          apply(..items, color: color)
         },
       )
     }

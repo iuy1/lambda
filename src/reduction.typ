@@ -1,39 +1,6 @@
 #import "struct.typ": *
 #import "parse.typ": *
-#import "binary.typ": *
-
-// Returns: (str,)
-#let free-vars(expr) = {
-  if type(expr) == str {
-    expr = parse(expr)
-  }
-  // `vars`: variables defined in outer scopes.
-  let impl(expr, vars) = {
-    if expr.type == "var" {
-      if vars.contains(expr.name) {
-        ()
-      } else {
-        (expr.name,)
-      }
-    } else if expr.type == "func" {
-      impl(
-        expr.body,
-        (
-          vars + expr.vars.map(v => v.name)
-        ).dedup(),
-      )
-    } else if expr.type == "apply" {
-      expr //
-        .items
-        .map(i => impl(i, vars))
-        .sum()
-        .dedup()
-    } else {
-      panic()
-    }
-  }
-  impl(expr, ())
-}
+#import "free-vars.typ": *
 
 // Replace v in expr to e.
 // `expr`, `e`: expression
@@ -55,7 +22,7 @@
         let name = expr.vars.at(i).name
         if name not in e-free { continue }
         let new-name = name + "'"
-        while new-name in e-free or new-name in names {
+        while new-name == v or new-name in e-free or new-name in names {
           new-name += "'"
         }
         expr.vars.at(i).name = new-name
@@ -131,6 +98,9 @@
 }
 
 #let beta-first(expr) = {
+  if type(expr) == str {
+    expr = parse(expr)
+  }
   let impl(expr) = {
     if expr.type == "var" {
       none
@@ -228,8 +198,4 @@
     }
   }
   expr
-}
-
-#let equal(expr1, expr2) = {
-  encode(expr1) == encode(expr2)
 }

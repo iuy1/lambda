@@ -1,23 +1,41 @@
 #import "parse.typ": *
 
-#let display(expr) = {
+#let display(expr, color: black) = {
   if type(expr) == str {
     expr = parse(expr)
   }
-  if expr.type == "var" {
-    expr.name
-  } else if expr.type == "func" {
-    "λ" + expr.vars.map(display).join() + "." + display(expr.body)
-  } else if expr.type == "apply" {
-    expr
-      .items
-      .map(i => if i.type == "var" {
-        i.name
+  let color = expr.at("color", default: color)
+  let impl(expr, color, parentheses) = {
+    color = expr.at("color", default: color)
+    let s = if expr.type == "var" {
+      expr.name
+    } else if expr.type == "func" {
+      (
+        "λ" //
+          + expr.vars.map(i => impl(i, color, false)).join()
+          + "."
+          + impl(expr.body, color, false)
+      )
+    } else if expr.type == "apply" {
+      expr
+        .items
+        .map(i => if i.type == "var" {
+          impl(i, color, false)
+        } else {
+          impl(i, color, true)
+        })
+        .join()
+    } else {
+      panic()
+    }
+    text(
+      if parentheses {
+        "(" + s + ")"
       } else {
-        "(" + display(i) + ")"
-      })
-      .join()
-  } else {
-    type(expr)
+        s
+      },
+      fill: color,
+    )
   }
+  impl(expr, color, false)
 }
